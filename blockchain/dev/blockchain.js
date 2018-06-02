@@ -75,4 +75,6 @@ Blockchain.prototype.proofOfWork = function(previousBlockHash, currentBlockData)
 
 
 
+
+
 module.exports = Blockchain; //把整份包成一個module讓其他程式(ex: test.js)能call
