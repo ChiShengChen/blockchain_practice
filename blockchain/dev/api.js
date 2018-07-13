@@ -1,7 +1,7 @@
 const express = require('express'); //api的npm js模組// npm i express --save
 const app = express();
 
-const bodyParser = require('body-parser');
+const bodyParser = require('body-parser'); //能讀postman的body資料
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -11,14 +11,16 @@ app.get('/blockchain', function (req, res) {
   
 });
  
-app.get('/transaction', function (req, res) {
+app.post('/transaction', function (req, res) {
 	console.log(req.body);
+    //res.send('It works!!');
     res.send('Transaction amount is ${req.body.amount} bitcoins.');
 });
 
 app.get('/mine', function (req, res) {
   
 });
+
 
 
 
