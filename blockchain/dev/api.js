@@ -5,23 +5,25 @@ const bodyParser = require('body-parser'); //能讀postman的body資料
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+const Blockchain = require('./blockchain');
+const bitcoin = new Blockchain();
 
 
 app.get('/blockchain', function (req, res) {
-  
-});
+    res.send(bitcoin);  
+
+});//the endpoint
  
 app.post('/transaction', function (req, res) {
 	console.log(req.body);
     //res.send('It works!!');
-    res.send('Transaction amount is ${req.body.amount} bitcoins.');
+    res.send(`Transaction amount is ${req.body.amount} bitcoins.`); // 是``不是''喔!!!(`在~鍵上)
+    
 });
 
 app.get('/mine', function (req, res) {
   
 });
-
-
 
 
 
