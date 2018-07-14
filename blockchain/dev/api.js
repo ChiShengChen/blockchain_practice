@@ -15,9 +15,12 @@ app.get('/blockchain', function (req, res) {
 });//the endpoint
  
 app.post('/transaction', function (req, res) {
-	console.log(req.body);
+	//console.log(req.body);
     //res.send('It works!!');
-    res.send(`Transaction amount is ${req.body.amount} bitcoins.`); // 是``不是''喔!!!(`在~鍵上)
+    //res.send(`Transaction amount is ${req.body.amount} bitcoins.`); // 是``不是''喔!!!(`在~鍵上)
+
+    const blockIndex = bitcoin.createNewTransaction(req.body.amount, req.body.sender, req.body.recipient);
+    res.json({note: `Transaction will be added in block ${blockIndex}.`});
     
 });
 
