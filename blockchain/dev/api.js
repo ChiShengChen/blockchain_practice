@@ -8,6 +8,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const Blockchain = require('./blockchain');
 const bitcoin = new Blockchain();
 
+// uuid用來創造unique亂碼字串(這邊當錢包地址用)
+const uuid = require('uuid/v1');
+//因為uuid會產生包含'-'的亂碼，所以這邊把-拿掉，把剩下字串接起來
+const nodeAddress = uuid().split('-').join('');
+
+
 app.get('/blockchain', function (req, res) {
     res.send(bitcoin);  
 
@@ -23,8 +29,31 @@ app.post('/transaction', function (req, res) {
     
 });
 
+
+//mine a block
 app.get('/mine', function (req, res) {
-  const newBlock = bitcoin.creatNewBlock();
+
+	const lastBlock = bitcoin.getLastBlock();
+	const previousBlockHash = lastBlock['hash'];
+	const currentBlockData = {
+
+		transactions: bitcoin.pendingTransactions,
+		index: lastBlock['index'] + 1
+
+	};
+
+	const nonce = bitcoin.proofOfWork(previousBlockHash, currentBlockData);
+	const blockHash = bitcoin.hashBlock(previousBlockHash, currentBlockData, nonce);
+    
+    // 礦工獎勵
+    // 這裡要import一個uuid 套件: npm i uuid --save
+	bitcoin.createNewTransaction(6.25, "00", nodeAddress);
+
+    const newBlock = bitcoin.createNewBlock(nonce, previousBlockHash, blockHash);
+    res.json({
+    	note: "Successfully mined a new block.",
+    	block: newBlock
+    });
 
 });
 
