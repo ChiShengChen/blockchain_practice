@@ -7,6 +7,7 @@
 > http://localhost:3000/blockchain
 <br>
 礦工獎勵/新出區塊紀錄
+
 > http://localhost:3000/mine
 
 #### postman
