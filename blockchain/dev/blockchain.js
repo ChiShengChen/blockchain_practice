@@ -1,9 +1,16 @@
 const sha256 = require('sha256'); //使用npm中sha256套件 //灌套件: npm i sha256 --save
 
+//開個接口對package.json
+const currentNodeUrl = process.argv[3];
+
 //建立blockchain物件
 function Blockchain() {
 	this.chain = []; //交易區塊鍊，存取驗證成功的交易資料
 	this.pendingTransactions = []; //存取還沒驗證進練交易的資料
+
+    //建立api network
+    this.currentNodeUrl = currentNodeUrl;
+    this.networkNodes = [];
 
 	this.createNewBlock(100, '0', '0'); //建立Genesis Block創世區塊(nonce, previousBlockHash, hash)均可自訂
 }
