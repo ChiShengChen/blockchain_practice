@@ -61,6 +61,28 @@ app.get('/mine', function (req, res) {
 });
 
 
+//////建構去中心化api network//////
+/*簡單來說，如果有一個單獨的api想加入一群api網路，那麼首先那個單獨的api必須利用register-and-broadcast-node
+把自己的url廣播給那個api網路，而該網路中的api們則利用register-node來記錄想加入那個api的url，
+最後那群網路裡的api們則利用register-nodes-bulk將他們的urls回傳給想加入的那隻單獨api，這樣一整個去中心化大api網路
+就完成了~!*/
+
+//register the node and 把他廣播給整個network
+app.post('/register-and-broadcast-node', function(req, res){
+    const newNodeUrl = req.body.newNodeUrl;
+    //內容...
+});
+//ONLY register a node with the network只存不廣播
+app.post('/register-node', function(req, res){
+
+});
+//register multiple nodes at onces
+app.post('/register-nodes-bulk', function(req, res){
+
+});
+
+
+
 
 
 // 要去中心化->就是多個api互相執行/溝通
