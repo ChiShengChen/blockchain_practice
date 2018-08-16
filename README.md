@@ -86,4 +86,4 @@ http://localhost:300x/blockchain
 
 <br>
 
-即代表完成node間的溝通形成network
+即代表完成node間的溝通，形成去中心化區塊鍊api network!
