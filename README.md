@@ -1,7 +1,7 @@
 # blockchain_practice
 
-### 檢視方法
-#### 瀏覽器
+### 檢視方法:
+#### 1.瀏覽器
 
 <hr>
 
@@ -12,7 +12,7 @@
 
 > http://localhost:3000/mine
 
-#### postman
+#### 2.postman
 
 <hr>
 
