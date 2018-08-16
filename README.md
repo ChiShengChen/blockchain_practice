@@ -28,9 +28,25 @@
 
 ##### 檢視register-node
 
-> http://localhost:3000//register-node
+> http://localhost:3000/register-node
 
 並在body中send欲加入網路之api的url即可於瀏覽器/blockchain檢視區塊鍊紀錄，例如:
 >   {
 	"newNodeUrl":"http://localhost:3005"
 }
+
+<br>
+
+##### 檢視register-nodes-bulk
+> http://localhost:3000/register-nodes-bulk
+
+並在body中send該群網路api的ur即可於瀏覽器/blockchain檢視區塊鍊紀錄，例如:
+>  {
+	"allNetworkNodes":[
+<br>		"http://localhost:3002",
+<br>		"http://localhost:3003",
+<br>    	"http://localhost:3004"
+		]
+}
+
+<br>
