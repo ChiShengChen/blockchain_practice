@@ -50,3 +50,40 @@
 }
 
 <br>
+
+<br>
+
+##### 檢視register-and-broadcast-node
+> http://localhost:3001/register-and-broadcast-node
+
+並在body中send該群網路api的ur即可於瀏覽器/blockchain檢視區塊鍊紀錄，例如:
+>  {
+	"newNodeUrl":"http://localhost:3005"
+}
+
+<br>
+
+這樣3001~3004的
+http://localhost:300x/blockchain
+中會有
+<br>
+
+>"networkNodes": [
+"http://localhost:3005"
+]
+
+<br>
+
+而3005中會有
+<br>
+
+"networkNodes": [
+"http://localhost:3001",
+"http://localhost:3002",
+"http://localhost:3003",
+"http://localost:3004"
+]
+
+<br>
+
+即代表完成node間的溝通形成network
