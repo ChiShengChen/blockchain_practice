@@ -77,11 +77,11 @@ http://localhost:300x/blockchain
 而3005中會有
 <br>
 
-"networkNodes": [
-"http://localhost:3001",
-"http://localhost:3002",
-"http://localhost:3003",
-"http://localost:3004"
+>"networkNodes": [
+<br> "http://localhost:3001",
+<br> "http://localhost:3002",
+<br> "http://localhost:3003",
+<br> "http://localost:3004"
 ]
 
 <br>
