@@ -3,6 +3,8 @@
 ### 檢視方法
 #### 瀏覽器
 
+<hr>
+
 總鍊
 > http://localhost:3000/blockchain
 <br>
@@ -11,6 +13,9 @@
 > http://localhost:3000/mine
 
 #### postman
+
+<hr>
+
 ##### 檢視transaction
 > http://localhost:3000/transaction
 
