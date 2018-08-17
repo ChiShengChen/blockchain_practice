@@ -1,5 +1,6 @@
 # blockchain_practice
 
+![image](https://github.com/ChiShengChen/blockchain_practice/raw/master/bcd2.png)
 ### 檢視方法:
 #### 1.瀏覽器
 
