@@ -75,7 +75,7 @@ http://localhost:300x/blockchain
 
 <br>
 ![image](https://github.com/ChiShengChen/blockchain_practice/raw/master/bcd3.png)
-<
+<br>
 
 而3005中會有
 <br>
