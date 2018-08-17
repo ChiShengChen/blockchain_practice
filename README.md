@@ -72,8 +72,10 @@ http://localhost:300x/blockchain
 >"networkNodes": [
 "http://localhost:3005"
 ]
-![image](https://github.com/ChiShengChen/blockchain_practice/raw/master/bcd3.png)
+
 <br>
+![image](https://github.com/ChiShengChen/blockchain_practice/raw/master/bcd3.png)
+<
 
 而3005中會有
 <br>
