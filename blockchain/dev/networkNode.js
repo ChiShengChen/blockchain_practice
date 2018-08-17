@@ -16,20 +16,47 @@ const nodeAddress = uuid().split('-').join('');
 //把port變成變數
 const port = process.argv[2];
 
+const rp = require('request-promise');
+
 
 app.get('/blockchain', function (req, res) {
     res.send(bitcoin);  
 
 });//the endpoint
  
+//create new transaction
 app.post('/transaction', function (req, res) {
-	//console.log(req.body);
-    //res.send('It works!!');
-    //res.send(`Transaction amount is ${req.body.amount} bitcoins.`); // 是``不是''喔!!!(`在~鍵上)
+	const newTransaction = req.body;
+    const blockIndex = bitcoin.addTransactionToPendingTransactions(newTransaction);
+    res.json({ note: `Transaction will be added in block ${blockIndex}.` });
+});
 
-    const blockIndex = bitcoin.createNewTransaction(req.body.amount, req.body.sender, req.body.recipient);
-    res.json({note: `Transaction will be added in block ${blockIndex}.`});
-    
+
+//推播交易給其他node
+app.post('/transaction/broadcast', function(req, res){
+    const newTransaction = bitcoin.createNewTransaction(req.body.amount, req.body.sender, req.body.recipient);
+    bitcoin.addTransactionToPendingTransactions(newTransaction);
+
+    const requestPromises = [];
+    bitcoin.networkNodes.forEach(networkNodeUrl => {
+        //要推播的內容
+        const requestOptions = {
+            uri: networkNodeUrl + '/transaction',
+            method: 'POST',
+            body: newTransaction,
+            json: true
+        };
+
+        requestPromises.push(rp(requestOptions));
+    });
+
+    //把Promises跑起來
+    Promise.all(requestPromises)
+    //跑起來之後要送request給我
+    .then(data => {
+        res.json({ note: 'Transaction created & broadcast successfully.'});
+    });
+
 });
 
 
@@ -68,16 +95,69 @@ app.get('/mine', function (req, res) {
 就完成了~!*/
 
 //register the node and 把他廣播給整個network
+//test the endpoints 要安裝 npm install request --save
 app.post('/register-and-broadcast-node', function(req, res){
     const newNodeUrl = req.body.newNodeUrl;
-    //內容...
+    if (bitcoin.networkNodes.indexOf(newNodeUrl) == -1) bitcoin.networkNodes.push(newNodeUrl);
+
+    const regNodesPromises = [];
+    bitcoin.networkNodes.forEach(networkNodeUrl => {
+        //'/register-node'
+        //這裡要裝一個模組 npm install request-promise --save
+        //request-promise能夠發request給網路中的所有node
+        const requestOptions = {
+            uri: networkNodeUrl + '/register-node',
+            method: 'POST',
+            body: { newNodeUrl: newNodeUrl},
+            json: true
+        };
+
+        regNodesPromises.push(rp(requestOptions));
+    });
+
+    Promise.all(regNodesPromises)
+    .then(data => {
+        //use the data...
+        const bulkRegisterOptions = {
+            uri: newNodeUrl + '/register-nodes-bulk',
+            method: 'POST',
+            body: { allNetworkNodes: [...bitcoin.networkNodes, bitcoin.currentNodeUrl]},
+            json: true
+        };
+
+        return rp(bulkRegisterOptions);
+
+    })
+
+    .then(data => {
+        res.json({ note: 'New node registered with network successfully.'});
+    });
 });
+
+
 //ONLY register a node with the network只存不廣播
 app.post('/register-node', function(req, res){
+   
+    const newNodeUrl = req.body.newNodeUrl;
+    const nodeNotAlreadyPresent = bitcoin.networkNodes.indexOf(newNodeUrl) == -1;
+    const notCurrentNode = bitcoin.currentNodeUrl !== newNodeUrl;
 
+    if (nodeNotAlreadyPresent && notCurrentNode) bitcoin.networkNodes.push(newNodeUrl);
+    res.json({ note: 'New node registered successfully.'});
 });
+
+
 //register multiple nodes at onces
 app.post('/register-nodes-bulk', function(req, res){
+
+    const allNetworkNodes = req.body.allNetworkNodes;
+    allNetworkNodes.forEach(networkNodeUrl => {
+        const nodeNotAlreadyPresent = bitcoin.networkNodes.indexOf(networkNodeUrl) == -1;
+        const notCurrentNode = bitcoin.currentNodeUrl !== networkNodeUrl;
+        if (nodeNotAlreadyPresent && notCurrentNode) bitcoin.networkNodes.push(networkNodeUrl);
+    });
+
+    res.json({ note: 'Bulk registration successful.'});
 
 });
 

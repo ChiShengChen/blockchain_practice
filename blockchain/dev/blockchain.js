@@ -3,6 +3,9 @@ const sha256 = require('sha256'); //使用npm中sha256套件 //灌套件: npm i 
 //開個接口對package.json
 const currentNodeUrl = process.argv[3];
 
+// uuid用來創造unique亂碼字串(這邊當交易id用)
+const uuid = require('uuid/v1');
+
 //建立blockchain物件
 function Blockchain() {
 	this.chain = []; //交易區塊鍊，存取驗證成功的交易資料
@@ -39,25 +42,51 @@ Blockchain.prototype.getLastBlock = function(){
 	return this.chain[this.chain.length - 1];
 }
 
+//////////////////////////////////////////for_api.js///////////////////////////////////////////////
+//玩api.js(單點區塊鍊api)時要把Blockchain.prototype.createNewTransaction這裡開起來
+//舊Blockchain.prototype.createNewTransaction這裡只考慮到單點交易資料的push，沒有做到交易資料在區塊鍊網路上的推播給網路上其他node/api
+// Blockchain.prototype.createNewTransaction = function(amount, sender, recipient){
+//     const newTransaction = {
+//     	amount: amount,
+//     	sender: sender,
+//     	recipient: recipient
+//     };
 
+//     this.pendingTransactions.push(newTransaction); //把東西push到第四行的pendingTransactions中
+    
+//     return this.getLastBlock()['index'] + 1;
+// }
+/////////////////////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////for_networkNode.js////////////////////////////////////////////
+//考慮到network的newTransaction
+//networkNode.js要用
 Blockchain.prototype.createNewTransaction = function(amount, sender, recipient){
     const newTransaction = {
-    	amount: amount,
-    	sender: sender,
-    	recipient: recipient
+     amount: amount,
+     sender: sender,
+     recipient: recipient,
+     transactionId: uuid().split('-').join('')
     };
 
-    this.pendingTransactions.push(newTransaction); //把東西push到第四行的pendingTransactions中
-    
+    return newTransaction;
+
+};
+
+Blockchain.prototype.addTransactionToPendingTransactions = function(transactionObj) {
+    this.pendingTransactions.push(transactionObj);
     return this.getLastBlock()['index'] + 1;
-}
+};
+
+///////////////////////////////////////////////////////////////////////////////////////
 
 
 Blockchain.prototype.hashBlock = function(previousBlockHash, currentBlockData, nonce){
     const dataAsString = previousBlockHash + nonce.toString() + JSON.stringify(currentBlockData); //turn all to string
     const hash = sha256(dataAsString); //creat string
     return hash;
-}
+};
 
 
 //proof of work
